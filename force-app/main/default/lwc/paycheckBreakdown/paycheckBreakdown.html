@@ -1,0 +1,70 @@
+<template>
+    <lightning-card title="Paycheck Breakdown" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+                        <!-- Input for gross pay and calculate button outside the table -->
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item padding="around-small" size="6">
+                                <lightning-input
+                                    type="number"
+                                    label="Gross Pay"
+                                    name="salaryInput"
+                                    onchange={handleSalaryChange}
+                                    value={salary}
+                                    placeholder="Enter Salary"
+                                    formatter="currency"
+                                    step="0.01">
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="6">
+                                <lightning-button variant="brand" label="Calculate" onclick={handleCalculate}></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate" title="Payment Interval">Payment Interval</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Amount ($)">Amount ($)</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Conditionally display rows if salary is greater than zero -->
+                    <template if:true={salary}>
+                        <tr>
+                            <td>Annually</td>
+                            <td>
+                                <lightning-formatted-number value={netPayAnnual} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </td>
+                            <td>{formattedTaxRate}</td>
+                        </tr>
+                        <tr>
+                            <td>Semi-Annually</td>
+                            <td>
+                                <lightning-formatted-number value={netPaySemiAnnual} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </td>
+                            <td>{formattedTaxRate}</td>
+                        </tr>
+                        <tr>
+                            <td>Monthly</td>
+                            <td>
+                                <lightning-formatted-number value={netPayMonthly} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </td>
+                            <td>{formattedTaxRate}</td>
+                        </tr>
+                        <tr>
+                            <td>Bi-Weekly</td>
+                            <td>
+                                <lightning-formatted-number value={netPayBiWeekly} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </td>
+                            <td>{formattedTaxRate}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            
+        </div>
+    </lightning-card>
+</template>

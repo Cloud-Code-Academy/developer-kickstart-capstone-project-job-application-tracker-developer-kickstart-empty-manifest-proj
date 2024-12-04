@@ -1,0 +1,111 @@
+<template>
+    <lightning-card title="Paycheck and Salary Breakdown" icon-name="utility:money">
+        <!-- Gross Pay and Deductions Section -->
+        <template if:true={loaded}>
+            <!-- Gross Pay Section -->
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Gross Pay">Gross Pay</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Amount">Amount</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Salary</td>
+                        <td>
+                            <lightning-formatted-number value={jobApplication.data.fields.Salary__c.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Deductions Section -->
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-m-top_medium">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Deductions">Deductions</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Amount">Amount</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Federal Income Tax</td>
+                        <td>
+                            <lightning-formatted-number value={jobApplication.data.fields.Federal_Income_Tax__c.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Social Security</td>
+                        <td>
+                            <lightning-formatted-number value={jobApplication.data.fields.Social_Security__c.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Medicare</td>
+                        <td>
+                            <lightning-formatted-number value={jobApplication.data.fields.Medicare_Withholding__c.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Take-Home Pay</strong></td>
+                        <td>
+                            <strong><lightning-formatted-number value={jobApplication.data.fields.Take_Home_Pay__c.value} format-style="currency" currency-code="USD"></lightning-formatted-number></strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tax Rate and Bracket Details -->
+            <div class="slds-m-top_medium slds-p-around_medium">
+                <p><strong> Tax Rate:</strong> {taxDetails.Rate}</p>
+                <p><strong>Tax Bracket:</strong> {taxDetails.Bracket}</p>
+            </div>
+        </template>
+
+        <!-- Net Pay Breakdown by Payment Interval -->
+        <template if:true={hasData}>
+            <div class="slds-p-around_medium">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Payment Interval">Payment Interval</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Amount" style="text-align: right;">Amount ($)</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={incomeData} for:item="dataRow">
+                            <tr key={dataRow.label}>
+                                <td data-label="Payment Interval">
+                                    <div class="slds-truncate" title={dataRow.label}>{dataRow.label}</div>
+                                </td>
+                                <td data-label="Amount" style="text-align: right;">
+                                    <lightning-formatted-number value={dataRow.amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <!-- Conditional Render for No Data Available -->
+        <template if:false={loaded}>
+            <div class="slds-p-around_medium">
+                <p>No data available.</p>
+            </div>
+        </template>
+    </lightning-card>
+</template>
